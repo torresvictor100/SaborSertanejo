@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.system.sabor.sertanejo.entity.CashDesk;
 import com.system.sabor.sertanejo.service.CashDeskService;
+import com.system.sabor.sertanejo.entity.Value;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -93,14 +94,13 @@ public class CashDeskController {
 	@ApiOperation(value = "UpdateAdd a cashdesk")
 	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 404, message = "Not Found") })
-	@PutMapping(path = "/add/{cashdesk_id}&valoe={cashdesk_valoe}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "/add/{cashdesk_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<CashDesk> updateAdd(@PathVariable(name = "cashdesk_id") Long id,
-			@PathVariable(name = "valoe")Double valoe) {
+			@RequestBody Value value) {
 		CashDesk cashDesk = cashDeskService.findById(id);
-		valoe.doubleValue();
 		try {
-			cashDesk = cashDeskService.updateAdd(cashDesk, valoe);
+			cashDesk = cashDeskService.updateAdd(cashDesk, value.getValue());
 			if (cashDesk == null) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
@@ -118,10 +118,10 @@ public class CashDeskController {
 	@PutMapping(path = "/remove/{cashdesk_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<CashDesk> updateRemove(@PathVariable(name = "cashdesk_id") Long id,
-			@RequestBody CashDesk cashDesk,@PathVariable(name = "valoe")Double valoe) {
-		cashDesk.setId(id);
+			@RequestBody Value value) {
+		CashDesk cashDesk = cashDeskService.findById(id);
 		try {
-			cashDesk = cashDeskService.updateRemove(cashDesk, valoe);
+			cashDesk = cashDeskService.updateRemove(cashDesk, value.getValue());
 			if (cashDesk == null) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {

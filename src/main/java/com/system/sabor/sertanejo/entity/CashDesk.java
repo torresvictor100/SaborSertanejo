@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
+
 @Entity
 @Table(name = "cashDesk")
 public class CashDesk {
